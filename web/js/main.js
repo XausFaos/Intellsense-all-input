@@ -3,6 +3,7 @@ eel.expose(getWordsEel);
 eel.expose(showWordsEel);
 eel.expose(nextWordEel);
 eel.expose(prevWordEel);
+eel.expose(setButtonLangText);
 
 function addKeyEel(name) {
     globalThis.app.addKey(name);
@@ -27,9 +28,6 @@ function prevWordEel() {
 window.onload = function() {
     var app = new App();
     window.globalThis.app = app;
-
-
-
 }
 
 class App {
@@ -41,7 +39,7 @@ class App {
 
         async function StartAsync() {
             let lang = await getLanguage();
-            document.getElementById("lang").innerHTML = `Language: ${lang}`;
+            setButtonLangText(lang)
         }
 
         StartAsync();
@@ -104,9 +102,13 @@ class App {
 async function swithLanguage(button) {
     await eel.swithLanguageEel()();
     let lang = await getLanguage();
-    button.innerHTML = `Language: ${lang}`;
+    setButtonLangText(lang);
 }
 
 async function getLanguage() {
     return eel.getLanguageEel()();
+}
+
+function setButtonLangText(lang) {
+    document.getElementById("lang").innerHTML = `Language: ${lang}`;
 }
