@@ -1,0 +1,35 @@
+body {
+    background-color: #2d3436;
+}
+
+.text-pressed {
+    height: 200px;
+    border-bottom: 1px solid #b2bec3;
+}
+
+.selected {
+    background-color: #0984e3;
+}
+
+.word {
+    color: white;
+}
+
+.downLine {
+    width: 100%;
+    border: #0984e3;
+    padding: 3px;
+}
+
+#lang {
+    color: #74b9ff;
+    background-color: #636e7200;
+    border: none;
+    padding-top: 5px;
+    padding-left: 0;
+    outline: none;
+}
+
+#lang:hover {
+    background-color: #636e72;
+}
