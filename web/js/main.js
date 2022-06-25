@@ -38,11 +38,11 @@ function setWindowsSize(x, y) {
 
 function GetSelectedWordEel() {
     var word = globalThis.app.getWord();
-    alert(word);
-    if (word) {
+    if (word != null) {
         return word;
     }
-    return null;
+
+    return "";
 }
 
 window.onload = function() {
@@ -120,6 +120,9 @@ class App {
 
     getWord() {
         var words = document.getElementsByClassName('word');
+        if (words.length == 0) {
+            return null;
+        }
         return words[this.selectedWord].innerHTML;
     }
 }

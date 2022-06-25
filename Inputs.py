@@ -100,19 +100,22 @@ class Inputs:
             UpdateWords(self.word)
             return False
         
-        print(self.lastNumEng)
         if self.lastNumEng[1] == "ctrl" and self.lastNumEng[2] == "right shift":
             self.SendWord()
+            return False
 
         return True
 
     def SendWord(self):
+        keyboard.press("ctrl + a")
+        keyboard.press("right")
+        
         selectedWord = eel.GetSelectedWordEel()()
         print(selectedWord)
         if selectedWord in ["", " ", None]:
             return
         
-        keyboard.write(selectedWord.replace(self.word, ""))
+        keyboard.write(selectedWord.replace(self.word, "")  + " ")
         
         self.word = ""
     
@@ -145,9 +148,9 @@ class Inputs:
             elif key == " ":
                 self.word = ""
                 
-            elif key in deleteKeys:
+            elif key in deleteKeys or key == None:
                 self.word += ""
-                
+            
             else:
                 self.word += key
 
