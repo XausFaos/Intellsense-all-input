@@ -4,6 +4,8 @@ eel.expose(showWordsEel);
 eel.expose(nextWordEel);
 eel.expose(prevWordEel);
 eel.expose(setButtonLangText);
+eel.expose(setWindowsSize);
+eel.expose(GetSelectedWordEel);
 
 function addKeyEel(name) {
     globalThis.app.addKey(name);
@@ -23,6 +25,24 @@ function nextWordEel() {
 
 function prevWordEel() {
     globalThis.app.previousWord();
+}
+
+function setButtonLangText(lang) {
+    document.getElementById("lang").innerHTML = `Language: ${lang}`;
+}
+
+function setWindowsSize(x, y) {
+    console.log(x, y);
+    window.resizeTo(x, y);
+}
+
+function GetSelectedWordEel() {
+    var word = globalThis.app.getWord();
+    alert(word);
+    if (word) {
+        return word;
+    }
+    return null;
 }
 
 window.onload = function() {
@@ -97,6 +117,16 @@ class App {
         }
         this.updateSelectedWord();
     }
+
+    getWord() {
+        var words = document.getElementsByClassName('word');
+        return words[this.selectedWord].innerHTML;
+    }
+}
+
+
+async function GetWindowSize() {
+    return eel.GetWindowSize()();
 }
 
 async function swithLanguage(button) {
@@ -107,8 +137,4 @@ async function swithLanguage(button) {
 
 async function getLanguage() {
     return eel.getLanguageEel()();
-}
-
-function setButtonLangText(lang) {
-    document.getElementById("lang").innerHTML = `Language: ${lang}`;
 }

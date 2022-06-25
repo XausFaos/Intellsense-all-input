@@ -11,6 +11,7 @@ codesForSpecialKeys = {"enter": '\n', "backspace": '', "space": " "}
 deleteKeys = ["delete", "shift", "ctrl", "alt", "caps_locktest lang 8932", "tab", "left", "right", "up", "down", "home", "end", "page_up", "page_down", "insert", "pause", "escape", "print_screen", "scroll_lock", "num_lock", "pause", "break", "insert", "help", "menu", "win_left", "win_right", "win_up", "win_down", "win_menu", "win_lock", "win_print", "win_scroll", "win_pause", "win_close", "win_back", "win_forward", "win_refresh", "win_stop", "win_search", "win_favorites", "win_home", "win_start", "win_print", "win_execute", "win_snapshot", "win_delete", "win_help", "win_undo", "win_redo", "win_copy", "win_cut", "win_paste", "win_close", "win_save", "win_open", "win_find", "win_props", "win_stop", "win_print", "win_open",
                 "win_close", "win_quit", "win_properties", "win_redo", "win_undo", "win_cut", "win_copy", "win_paste", "win_pastespecial", "win_pageup", "win_pagedown", "win_home", "win_end", "win_insert", "win_delete", "win_selectall", "win_print", "win_printsetup", "win_printpreview", "win_save", "win_open", "win_close", "win_quit", "win_exit", "win_sleep", "win_wake", "win_print", "win_send", "win_spell", "win_cut", "win_copy", "win_paste", "win_pastespecial", "win_attention", "win_contacts", "win_calendar", "win_mail", "win_media", "win_browser", "win_chat", "win_clock", "win_search", "win_connect", "win_games", "win_tools", "win_settings", "win_setup", "win_support", "win_help", "win_unavailable", "win_new", "win_open", "left windows", "alt gr", "esc"]
 
+allowkeys = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,;'[]`1234567890-=!@#$%^&*()_+|~<>?/{}\йцукенгшщзхъфывапролджэячсмитьбюёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ"
 
 def UpdateWords(words):
     eel.getWordsEel(words)
@@ -22,7 +23,6 @@ class Inputs:
     lastNumEng = ["", "", ""]
 
     word = ""
-    
     
 
     def __init__(self, TextFinder):
@@ -46,8 +46,7 @@ class Inputs:
         def OnClick(x, y, button, pressed):
             if str(button) == "Button.left" and pressed and self.lastNumEng.count("alt") == 3:
                 self.gui.SetWindowPosition(x, y)
-                self.gui.flagMovePos = False
-            
+                self.lastNumEng[-1] = "_"            
             
                 
         with Listener(on_click=OnClick) as listener:
@@ -55,16 +54,19 @@ class Inputs:
 
 
     def AnalyzeKey(self, key):
+        if self.lang == 'ru' and key in codes.keys():
+            return codes[key]
+        
+        elif key in allowkeys:
+            return key
+        
         if key in deleteKeys:
             return ""
 
-        if self.lang == 'ru' and key in codes.keys():
-            key = codes[key]
-
         elif key in codesForSpecialKeys.keys():
-            key = codesForSpecialKeys[key]
+            return codesForSpecialKeys[key]
 
-        return key
+        return None
 
 
     def AddKeyToLastKeyList(self, key):
@@ -97,10 +99,23 @@ class Inputs:
             self.word = ""
             UpdateWords(self.word)
             return False
+        
+        print(self.lastNumEng)
+        if self.lastNumEng[1] == "ctrl" and self.lastNumEng[2] == "right shift":
+            self.SendWord()
 
         return True
 
-
+    def SendWord(self):
+        selectedWord = eel.GetSelectedWordEel()()
+        print(selectedWord)
+        if selectedWord in ["", " ", None]:
+            return
+        
+        keyboard.write(selectedWord.replace(self.word, ""))
+        
+        self.word = ""
+    
     def PressKey(self, e):
         if e.event_type == 'down':
             
@@ -112,8 +127,8 @@ class Inputs:
                 eel.nextWordEel()
                 return
             
-            elif e.name == "enter":
-                return
+            #elif e.name == "enter":
+            #    return
 
             self.AddKeyToLastKeyList(e.name)
 
@@ -122,7 +137,8 @@ class Inputs:
                 return
 
             key = self.AnalyzeKey(e.name)
-
+            print(key)
+            
             if key == "":
                 self.word = self.word[:-1]
                 

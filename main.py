@@ -41,10 +41,9 @@ def setLanguage(lang):
 
     
 if __name__ == "__main__":
-
+    
     textAnalyzer = TextFinder("words.txt")
     board = Inputs.Inputs(textAnalyzer)
     gui = GUI.GUI(board)
-
 
 # решить проблему с resize при перемещении окна
